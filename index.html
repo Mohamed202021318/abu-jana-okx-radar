@@ -1,113 +1,196 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abu Jana OKX Ultimate Radar - 120 ثانية</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            color: #00ffcc;
-            font-size: 22px;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #1e1e1e;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-        }
-        .status {
-            font-size: 18px;
-            margin: 15px 0;
-            padding: 10px;
-            border-radius: 5px;
-            background: #2d2d2d;
-        }
-        table {
-            width: 100%;
-            margin-top: 15px;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 10px;
-            border: 1px solid #444;
-            font-size: 14px;
-        }
-        th {
-            background-color: #333;
-            color: #00ffcc;
-        }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Abu Jana — OKX Ultimate Radar | Mobile 120s</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#07111b;color:#e8f0f7;font-family:Arial,Tahoma,sans-serif}
+.wrap{max-width:1250px;margin:auto;padding:16px}.head{background:#0c1825;border:1px solid #20354a;border-radius:16px;padding:18px;text-align:center}
+h1{margin:0 0 8px;font-size:26px}p{margin:6px;color:#91a7ba}.controls{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0}
+label{font-size:12px;color:#91a7ba}.box{background:#0c1825;border:1px solid #20354a;border-radius:12px;padding:10px}select,input,button{width:100%;background:#101f2e;color:#fff;border:1px solid #29445b;border-radius:9px;padding:10px;margin-top:5px}
+button{background:#0b9468;border:0;font-weight:bold;cursor:pointer}.status{padding:10px;border-radius:10px;background:#0c1825;border:1px solid #20354a;margin-bottom:12px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}.card{background:#0c1825;border:1px solid #20354a;border-radius:12px;padding:12px;text-align:center}.num{font-size:25px;font-weight:bold;margin-top:5px}
+table{width:100%;border-collapse:collapse;background:#0c1825;border:1px solid #20354a;border-radius:14px;overflow:hidden}th,td{padding:9px 7px;border-bottom:1px solid #1b3042;text-align:center;font-size:12px}th{color:#91a7ba;background:#0a1622;position:sticky;top:0}tr:hover{background:#102131}.buy{color:#42e3a1;font-weight:bold}.sell{color:#ff5577;font-weight:bold}.wait{color:#ffd35a;font-weight:bold}.pill{padding:6px 9px;border-radius:8px;display:inline-block}.pb{background:#123c30}.ps{background:#451b29}.pw{background:#4a3914}.small{font-size:11px;color:#8da3b5}.err{color:#ff7189}.green{color:#42e3a1}.red{color:#ff5577}@media(max-width:800px){.controls{grid-template-columns:repeat(2,1fr)}.cards{grid-template-columns:repeat(2,1fr)}table{font-size:11px}th,td{padding:7px 3px}}
+</style>
 </head>
 <body>
+<div class="wrap">
+<div class="head">
+<h1>🎯 Abu Jana — OKX Ultimate Radar FINAL</h1>
+<p>ماسح USDT Perpetual مباشر — إشارات شراء/بيع + دخول + وقف خسارة + أهداف</p>
+</div>
 
-    <div class="container">
-        <h1>Abu Jana OKX Ultimate Radar</h1>
-        <p>راصد العقود الآجلة - تحديث تلقائي كل 120 ثانية</p>
-        
-        <div class="status" id="statusText">جاري الاتصال بالسوق وجلب البيانات...</div>
+<div class="controls">
+<div class="box"><label>عدد العملات</label><select id="limit"><option>30</option><option>50</option></select></div>
+<div class="box"><label>الفاصل الأساسي</label><select id="tf"><option value="15m">15 دقيقة</option><option value="5m">5 دقائق</option><option value="1H">1 ساعة</option></select></div>
+<div class="box"><label>حد الإشارة</label><select id="threshold"><option>60</option><option>65</option><option>70</option></select></div>
+<div class="box"><label>التحديث</label><select id="refresh"><option value="120" selected>120 ثانية</option><option value="60">60 ثانية</option><option value="30">30 ثانية</option></select></div>
+<div class="box"><label>&nbsp;</label><button onclick="scan()">🔄 فحص الآن</button></div>
+</div>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>العملة</th>
-                    <th>السعر الحالي</th>
-                    <th>التغير (24 ساعة)</th>
-                </tr>
-            </thead>
-            <tbody id="marketTable">
-                <tr>
-                    <td colspan="3">في انتظار البيانات...</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+<div id="status" class="status">جاهز للفحص...</div>
+<div class="cards">
+<div class="card">🟢 شراء قوي<div class="num green" id="buys">0</div></div>
+<div class="card">🔴 بيع قوي<div class="num red" id="sells">0</div></div>
+<div class="card">⏳ انتظار<div class="num" id="waits">0</div></div>
+<div class="card">📊 تم تحليل<div class="num" id="done">0</div></div>
+</div>
 
-    <script>
-        async function fetchOKXData() {
-            const statusText = document.getElementById("statusText");
-            const marketTable = document.getElementById("marketTable");
-            
-            try {
-                statusText.innerText = "جاري تحديث الرادار...";
-                const response = await fetch('https://www.okx.com/api/v5/market/tickers?instType=SWAP');
-                const data = await response.json();
-                
-                if(data && data.data) {
-                    let rows = "";
-                    // عرض عينة من العملات النشطة للتأكد من عمل الرادار
-                    const topTickers = data.data.slice(0, 5); 
-                    topTickers.forEach(ticker => {
-                        let color = parseFloat(ticker.last) >= parseFloat(ticker.open24h) ? "#00ffcc" : "#ff4d4d";
-                        rows += `<tr>
-                            <td><b>${ticker.instId}</b></td>
-                            <td>${ticker.last}</td>
-                            <td style="color: ${color}">${(((ticker.last - ticker.open24h)/ticker.open24h)*100).toFixed(2)}%</td>
-                        </tr>`;
-                    });
-                    marketTable.innerHTML = rows;
-                    statusText.innerText = "الرادار يعمل بنجاح - يتم التحديث كل 120 ثانية";
-                }
-            } catch (error) {
-                statusText.innerText = "خطأ في الاتصال بالمنصة، يتم إعادة المحاولة...";
-            }
-        }
+<table>
+<thead><tr>
+<th>#</th><th>العملة</th><th>24h</th><th>RSI</th><th>الاتجاه HTF</th><th>القوة</th><th>الإشارة</th><th>الدخول</th><th>وقف الخسارة</th><th>TP1</th><th>TP2</th>
+</tr></thead>
+<tbody id="rows"></tbody>
+</table>
+</div>
 
-        // تشغيل فوري عند فتح الصفحة
-        fetchOKXData();
+<script>
+const API='https://www.okx.com';
+let timer=null;
+const $=id=>document.getElementById(id);
+function fmt(x){if(x===null||x===undefined||x===''||!isFinite(Number(x)))return '—'; x=Number(x); if(x>=100)return x.toFixed(2); if(x>=1)return x.toFixed(4); if(x>=.001)return x.toFixed(6); return x.toPrecision(7)}
+function pct(x){return (x>=0?'+':'')+x.toFixed(2)+'%'}
+function nums(a){return a.map(Number).filter(Number.isFinite)}
+function rsi(closes,n=14){
+ const a=nums(closes); if(a.length<n+1)return 50;
+ let g=0,l=0;
+ for(let i=a.length-n;i<a.length;i++){const d=a[i]-a[i-1];if(d>0)g+=d;else l-=d}
+ g/=n;l/=n;
+ if(l===0)return g>0?100:50;
+ return 100-100/(1+g/l);
+}
+function ema(a,n){
+ const v=nums(a); if(!v.length)return NaN;
+ const k=2/(n+1); let e=v[0];
+ for(let i=1;i<v.length;i++)e=v[i]*k+e*(1-k);
+ return e;
+}
+function atrFromOHLC(rows,n=14){
+ const a=rows.map(r=>({h:+r[2],l:+r[3],c:+r[4]})).filter(r=>[r.h,r.l,r.c].every(Number.isFinite));
+ if(a.length<n+1)return NaN;
+ let tr=[];
+ for(let i=1;i<a.length;i++)tr.push(Math.max(a[i].h-a[i].l,Math.abs(a[i].h-a[i-1].c),Math.abs(a[i].l-a[i-1].c)));
+ return tr.slice(-n).reduce((s,x)=>s+x,0)/Math.min(n,tr.length);
+}
+async function get(url){
+  const direct=API+url;
+  const proxy='https://api.allorigins.win/raw?url='+encodeURIComponent(direct);
+  let lastErr=null;
+  for(const target of [direct,proxy]){
+    try{
+      const r=await fetch(target,{cache:'no-store'});
+      if(!r.ok) throw Error('HTTP '+r.status);
+      const j=await r.json();
+      if(j.code!=='0') throw Error(j.msg||'OKX error');
+      return j.data;
+    }catch(e){ lastErr=e; }
+  }
+  throw lastErr||Error('تعذر الاتصال');
+}
+async function scan(){
+ clearTimeout(timer);
+ $('status').textContent='⏳ جارِ الاتصال بـ OKX وتحليل أعلى 30 عملة...';
+ $('rows').innerHTML='';
+ try{
+  const inst=await get('/api/v5/public/instruments?instType=SWAP');
+  const tick=await get('/api/v5/market/tickers?instType=SWAP');
+  const map=new Map(tick.map(x=>[x.instId,x]));
+  const usdt=inst.filter(x=>x.settleCcy==='USDT'&&x.state==='live')
+   .map(x=>({x,t:map.get(x.instId)}))
+   .filter(z=>z.t&&Number(z.t.volCcy24h)>0)
+   .sort((a,b)=>Number(b.t.volCcy24h)-Number(a.t.volCcy24h))
+   .slice(0,Number($('limit').value));
 
-        // التحديث تلقائياً كل 120 ثانية (120000 مللي ثانية)
-        setInterval(fetchOKXData, 120000);
-    </script>
+  let out=[],buys=0,sells=0;
+  for(const z of usdt){
+   try{
+    const [c15,h1]=await Promise.all([
+      get('/api/v5/market/candles?instId='+encodeURIComponent(z.x.instId)+'&bar='+$('tf').value+'&limit=100'),
+      get('/api/v5/market/candles?instId='+encodeURIComponent(z.x.instId)+'&bar=1H&limit=100')
+    ]);
 
-</body>
-</html>
+    const rows15=c15.slice().reverse(), rows1h=h1.slice().reverse();
+    const closes=rows15.map(a=>+a[4]), highs=rows15.map(a=>+a[2]), lows=rows15.map(a=>+a[3]);
+    const hcl=rows1h.map(a=>+a[4]);
+    const price=Number(z.t.last);
+    const open24=Number(z.t.open24h);
+    const chg=(Number.isFinite(price)&&Number.isFinite(open24)&&open24>0)?(price/open24-1)*100:0;
+
+    const R=rsi(closes,14);
+    const e9=ema(closes.slice(-70),9), e20=ema(closes.slice(-70),20), e50=ema(closes.slice(-90),50);
+    const he20=ema(hcl.slice(-70),20), he50=ema(hcl.slice(-90),50);
+    const htfUp=Number.isFinite(he20)&&Number.isFinite(he50)&&he20>he50;
+    const htfDown=Number.isFinite(he20)&&Number.isFinite(he50)&&he20<he50;
+    const htf=htfUp?'صاعد':htfDown?'هابط':'متذبذب';
+
+    const mom=(closes.length>6&&closes[closes.length-6]>0)?(price/closes[closes.length-6]-1)*100:0;
+    const atr=atrFromOHLC(rows15,14);
+    const hi20=Math.max(...highs.slice(-21,-1)), lo20=Math.min(...lows.slice(-21,-1));
+    const breakoutUp=price>hi20, breakoutDown=price<lo20;
+    const trendUp=price>e20&&e9>e20&&e20>e50;
+    const trendDown=price<e20&&e9<e20&&e20<e50;
+    const volume=Number(z.t.volCcy24h)>0?1:0; // liquidity gate; candle volume ratio below
+    const candleVol=rows15.map(a=>Number(a[5])).filter(Number.isFinite);
+    const avgv=candleVol.length>=21?candleVol.slice(-21,-1).reduce((a,b)=>a+b,0)/20:0;
+    const rv=avgv>0?Number(rows15.at(-1)[5])/avgv:1;
+
+    let buy=0,sell=0,bc=0,sc=0;
+    if(htfUp){buy+=20;bc++} if(htfDown){sell+=20;sc++}
+    if(trendUp){buy+=20;bc++} if(trendDown){sell+=20;sc++}
+    if(breakoutUp){buy+=18;bc++} if(breakoutDown){sell+=18;sc++}
+    if(mom>0.25){buy+=10;bc++} if(mom<-0.25){sell+=10;sc++}
+    if(R>=48&&R<=68){buy+=12;bc++} if(R>=32&&R<=52){sell+=12;sc++}
+    if(rv>=1.15){buy+=10;bc++;sell+=10;sc++}
+
+    const side=buy>=sell?'BUY':'SELL';
+    const raw=Math.round(Math.max(buy,sell));
+    let signal='انتظار', cls='wait', entry=null, sl=null, tp1=null, tp2=null;
+    const threshold=Number($('threshold').value);
+
+    if(side==='BUY' && buy>=threshold && bc>=4 && htfUp && (trendUp||breakoutUp) && R<74){
+      signal='🟢 شراء قوي';cls='buy';buys++;
+      entry=price;
+      const risk=Math.max(Number.isFinite(atr)?atr*1.15:price*.01,price*.006);
+      sl=Math.min(entry-risk,lo20);
+      const rr=Math.max(entry-sl,price*.004);
+      sl=entry-rr;tp1=entry+rr*1.5;tp2=entry+rr*2.5;
+    } else if(side==='SELL' && sell>=threshold && sc>=4 && htfDown && (trendDown||breakoutDown) && R>26){
+      signal='🔴 بيع قوي';cls='sell';sells++;
+      entry=price;
+      const risk=Math.max(Number.isFinite(atr)?atr*1.15:price*.01,price*.006);
+      sl=Math.max(entry+risk,hi20);
+      const rr=Math.max(sl-entry,price*.004);
+      sl=entry+rr;tp1=entry-rr*1.5;tp2=entry-rr*2.5;
+    }
+
+    out.push({id:z.x.instId,chg,R,htf,score:raw,signal,cls,entry,sl,tp1,tp2,confirm:side==='BUY'?bc:sc,rv});
+   }catch(err){
+    out.push({id:z.x.instId,chg:0,R:50,htf:'—',score:0,signal:'بيانات غير متاحة',cls:'wait',entry:null,sl:null,tp1:null,tp2:null,confirm:0,rv:0});
+   }
+  }
+
+  out.sort((a,b)=>b.score-a.score);
+  const wait=out.length-buys-sells;
+  $('buys').textContent=buys;$('sells').textContent=sells;$('waits').textContent=wait;$('done').textContent=out.length;
+
+  $('rows').innerHTML=out.map((a,i)=>`<tr>
+   <td>${i+1}</td><td><b>${a.id}</b><div class="small">${a.confirm}/6 تأكيد</div></td>
+   <td class="${a.chg>=0?'green':'red'}">${pct(a.chg)}</td>
+   <td>${Number.isFinite(a.R)?a.R.toFixed(1):'—'}</td><td>${a.htf}</td><td><b>${a.score}%</b></td>
+   <td><span class="pill ${a.cls==='buy'?'pb':a.cls==='sell'?'ps':'pw'}">${a.signal}</span></td>
+   <td>${fmt(a.entry)}</td><td>${fmt(a.sl)}</td><td>${fmt(a.tp1)}</td><td>${fmt(a.tp2)}</td>
+  </tr>`).join('');
+
+  $('status').innerHTML='✅ تم التحليل: '+new Date().toLocaleTimeString('ar-EG')+
+   ' — 24h محسوبة من open24h الرسمي — HTF = 1H — <span class="small">الإشارات تحليلية وليست ضمانًا للربح.</span>';
+ }catch(e){
+  $('status').innerHTML='<span class="err">❌ تعذر جلب البيانات: '+e.message+'</span>';
+ }
+ timer=setTimeout(scan,Number($('refresh').value)*1000);
+}
+window.addEventListener('DOMContentLoaded', () => {
+  $('status').textContent='⏳ جارِ بدء الفحص التلقائي...';
+  scan();
+});
+</script>
+</body></html>
